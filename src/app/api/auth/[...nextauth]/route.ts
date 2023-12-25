@@ -1,9 +1,11 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import { PrismaClient } from '@prisma/client'
 
+const prisma =new PrismaClient()
 export const authOptions: NextAuthOptions = {
-  // Configure one or more authentication providers
+  
   providers: [
     GithubProvider({
       clientId: '7b28b61e01d2de291f92' as string,
@@ -17,7 +19,36 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET as string,
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      return true
+      
+try{
+  const email = user.email ?? "";
+  const name = user.name ?? ""; 
+  const image = user.image ?? ""; 
+  await prisma.user.upsert({
+    where: { id:email  },
+    create: {
+      id: email ,
+      name: name ,
+      profilepic: image,
+      Phonenumber:+91,
+     
+    },
+    update: {
+      name:name,
+      profilepic:image,
+     
+    },
+
+
+  })
+
+  return true
+}
+catch (error){
+  alert(error)
+  return false
+}
+      
     },
     async redirect({ url, baseUrl }) {
       return baseUrl
