@@ -63,15 +63,15 @@ const Home1 = () => {
       return (
         <div className='text-3xl'>
           {user?.profilepic && (
-            <div className='flex justify-start flex-col'>
+            <div className='flex sm:justify-start sm:items-start  items-center flex-col'>
               <img className='my-3 block ml-[2%] w-16 h-16 rounded-full p-3 border-2 border-white' src={user.profilepic} />
               <h1 className='my-4 ml-[2%]'> {session.user?.name} </h1>
               <h1 className='ml-[2%] font-bold text-blue-400 my-2'>My Notes</h1>
               <ul className='ml-[2%]'>
                 {user.posts?.map((post, index) => (
-                  <div className='flex items-center my-3 gap-6' key={post.id}>
+                  <div className='flex sm:justify-start items-center justify-center my-3 gap-6' key={post.id}>
                     <Link href={'/newnotes/' + post.id}>
-                      <li className='hover:scale-105'>{post.title}</li>
+                      <li className=' hover:scale-105'>{post.title}</li>
                     </Link>
                     <button
                       onClick={() => {
