@@ -22,4 +22,4 @@ export default function RootLayout({
     </html>
   )
 }
-export {SessionProvider as AuthProvider} from "next-auth/react"
+// export {SessionProvider } from "next-auth/react"
