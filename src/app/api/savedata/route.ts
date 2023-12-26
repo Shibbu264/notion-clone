@@ -8,7 +8,8 @@ export async function POST(req:Request){
 
     const body=await req.json()
     const noteid=body.noteid??""
-
+const title=body.title??""
+const content=body.content??""
     try{
       const user=await prisma.user.findUnique({where:{
         id:body.userid??""
@@ -17,15 +18,17 @@ export async function POST(req:Request){
 await prisma.post.upsert(
   {create:{
     id:noteid,
-    title:"New-note",
-    content:"Start writing from here..",
+    title:title,
+    content:content,
     authorId:user?.id??"",
     categories:""
      
    },
  
   update:{
-    
+    title:title,
+    content:content,
+    categories:""
   },
   where:{
     id:noteid,
