@@ -1,20 +1,27 @@
 import { PrismaClient } from '@prisma/client';
+import { error } from 'console';
+import { create } from 'domain';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { NextResponse } from 'next/server';
+
+import { NextRequest, NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
 
 export  async function POST(
-    req: NextApiRequest
+    req: Request
     
   ) : Promise <any> {
-     console.log(req.body)
+    const body =await req.json();
+     
       try {
        
         const user = await  prisma.user.findUnique({
             where: {
-              id: 'shivanshu.ranjan.che22@itbhu.ac.in',
+              id:body.email,
+            },
+            include: {
+              posts: true,
             },
           });
          
@@ -29,4 +36,5 @@ export  async function POST(
       }
 
     }
+  
   

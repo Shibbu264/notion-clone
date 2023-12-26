@@ -17,19 +17,11 @@ model User {
 
 
 model Post {
-  id         Int        @id @default(autoincrement())
+  id         String       @id @unique 
   title      String
-  published  Boolean    @default(true)
   content    String
   authorId   String
   author     User       @relation(fields: [authorId], references: [id])
-  categories Category[]
+  categories String
 }
 
-model Category {
-  id    Int    @id @default(autoincrement())
-  name  String
-  posts Post[]
-
-  @@unique([name])
-}
