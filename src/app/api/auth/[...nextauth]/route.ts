@@ -51,7 +51,7 @@ catch (error){
       
     },
     async redirect({ url, baseUrl }) {
-      return baseUrl
+      return url
     },
     async session({ session, user, token }) {
       return session
