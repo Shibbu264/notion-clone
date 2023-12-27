@@ -2,10 +2,11 @@
 import Image from 'next/image';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import DeleteIcon from '@mui/icons-material/Delete';
+
 import { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import Link from 'next/link';
-import {Hearts } from 'react-loader-spinner'
+import { Hearts } from 'react-loader-spinner'
 
 
 const Home1 = () => {
@@ -14,7 +15,7 @@ const Home1 = () => {
     title: string;
     // Add other properties as needed
   }
-  
+
   interface User {
     profilepic: string;
     posts?: Post[];
@@ -23,7 +24,7 @@ const Home1 = () => {
   const { data: session, status } = useSession();
   const [user, setUser] = useState<User | null>(null);
   const unique_id = uuid().slice(0, 8);
-const [loading,setLoading]=useState(true)
+  const [loading, setLoading] = useState(true)
   async function deleteNote(noteid: string) {
     await fetch('/api/deletenote', {
       method: 'POST',
@@ -58,30 +59,30 @@ const [loading,setLoading]=useState(true)
       fetchUserData(email ?? '');
     }
   }, [status, session?.user?.email]);
-  
-   if(status=="unauthenticated"){
+
+  if (status == "unauthenticated") {
     window.location.replace('/signin');
   }
 
-  if (status === 'loading'||loading  ) return ( <div className='flex items-center justify-center h-screen'>
-      
-     
+  if (status === 'loading' || loading) return (<div className='flex items-center justify-center h-screen'>
 
-  <div className='my-12 flex flex-col items-center text-xl sm:text-3xl text-[#D7EDE9] font-bold text-center'>
-    <h1>Welcome Overthinker!</h1> 
-    <Hearts
-  height="140"
-  width="140"
-  color="#4fa94d"
-  ariaLabel="hearts-loading"
-  wrapperStyle={{}}
-  wrapperClass=""
-  visible={true}
-  />
-    <h1 >Fetching your Thoughts.....</h1>
-    
-  </div>
-</div>)
+
+
+    <div className='my-12 flex flex-col items-center text-xl sm:text-3xl text-[#D7EDE9] font-bold text-center'>
+      <h1>Welcome Overthinker!</h1>
+      <Hearts
+        height="140"
+        width="140"
+        color="#4fa94d"
+        ariaLabel="hearts-loading"
+        wrapperStyle={{}}
+        wrapperClass=""
+        visible={true}
+      />
+      <h1 >Fetching your Thoughts.....</h1>
+
+    </div>
+  </div>)
   else {
     if (session) {
       return (
@@ -106,9 +107,16 @@ const [loading,setLoading]=useState(true)
                     >
                       <DeleteIcon className='cursor-pointer hover:text-red-500' />
                     </button>
+                   
                   </div>
                 ))}
               </ul>
+              <button
+                      className=' ml-[2%] bg-white text-blue-500 hover:text-white hover:bg-blue-500 px-2 py-2 rounded-xl'
+                      onClick={() => signOut().then(() => window.location.replace('/signin'))}
+                    >
+                      Sign out
+                    </button>
             </div>
           )}
           <br />
@@ -117,15 +125,10 @@ const [loading,setLoading]=useState(true)
               Create notes!
             </button>
           </Link>
-          <button
-            className='mt-[25%] mx-auto block bg-white text-blue-500 hover:text-white hover:bg-blue-500 px-2 py-2 rounded-xl'
-            onClick={() => signOut().then(() => window.location.replace('/signin'))}
-          >
-            Sign out
-          </button>
+
         </div>
       );
-    } 
+    }
   }
 };
 

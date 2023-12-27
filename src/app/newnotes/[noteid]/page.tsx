@@ -4,15 +4,32 @@ import { useSession } from 'next-auth/react';
 import { stat } from "fs";
 import { Hearts } from "react-loader-spinner";
 import Link from "next/link";
+import io from 'socket.io-client';
+import { Socket } from 'socket.io-client';
 export default function Note({params}:{params:{noteid:string}}){
 const { data: session,status} = useSession() 
 const[title,settitle]=useState("Title")
 const [content,setContent]=useState("")
 const [loader,setloader]=useState(true)
-
+const [socket, setsocket] = useState<Socket | null>(null)
 
 const noteid1=params.noteid
 const [Noteidaftersaving,setnoteid]=useState("")
+
+
+
+
+
+const socketInitializer = async () => {
+ 
+  const connection = io()
+console.log(connection)
+ setsocket(connection)
+}
+socket?.on('connect_error',async (err) =>{
+  console.log(err)
+  await fetch('/api/socket')})
+
 async function savenotes(noteid:string) {
   
     const response = await fetch("/api/notesave",{
@@ -33,11 +50,14 @@ setloader(false)
     
 useEffect(
   ()=>{
-    
+  
 if(status=="authenticated" )
- {  savenotes(noteid1)
-   console.log("inside-effect")}
-
+ { 
+//  socketInitializer()
+  savenotes(noteid1)
+   console.log("inside-effect")
+}
+   
   }   
     ,[status])
 
