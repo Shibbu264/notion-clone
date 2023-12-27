@@ -1,10 +1,11 @@
+"use client"
 import Image from 'next/image';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import Link from 'next/link';
-
+import {Hearts } from 'react-loader-spinner'
 
 
 const Home1 = () => {
@@ -22,7 +23,7 @@ const Home1 = () => {
   const { data: session, status } = useSession();
   const [user, setUser] = useState<User | null>(null);
   const unique_id = uuid().slice(0, 8);
-
+const [loading,setLoading]=useState(true)
   async function deleteNote(noteid: string) {
     await fetch('/api/deletenote', {
       method: 'POST',
@@ -49,6 +50,7 @@ const Home1 = () => {
       }
       console.log(data.user.posts);
       setUser(data.user);
+      setLoading(false)
     }
 
     if (status === 'authenticated') {
@@ -56,8 +58,30 @@ const Home1 = () => {
       fetchUserData(email ?? '');
     }
   }, [status, session?.user?.email]);
+  
+   if(status=="unauthenticated"){
+    window.location.replace('/signin');
+  }
 
-  if (status === 'loading') return <div className='my-12 text-3xl text-red-400 font-bold text-center'>Loading...</div>;
+  if (status === 'loading'||loading  ) return ( <div className='flex items-center justify-center h-screen'>
+      
+     
+
+  <div className='my-12 flex flex-col items-center text-xl sm:text-3xl text-[#D7EDE9] font-bold text-center'>
+    <h1>Welcome Overthinker!</h1> 
+    <Hearts
+  height="140"
+  width="140"
+  color="#4fa94d"
+  ariaLabel="hearts-loading"
+  wrapperStyle={{}}
+  wrapperClass=""
+  visible={true}
+  />
+    <h1 >Fetching your Thoughts.....</h1>
+    
+  </div>
+</div>)
   else {
     if (session) {
       return (
@@ -101,9 +125,7 @@ const Home1 = () => {
           </button>
         </div>
       );
-    } else {
-      window.location.replace('/signin');
-    }
+    } 
   }
 };
 

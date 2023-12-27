@@ -18,7 +18,7 @@ await prisma.post.upsert(
   {create:{
     id:noteid,
     title:"New-note",
-    content:"Start writing from here..",
+    content:"",
     authorId:user?.id??"",
     categories:""
      
